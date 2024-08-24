@@ -1,0 +1,7 @@
+Reward function:
+    reward the model each time the sum of it's cards ranks decreases
+    reward the model when the number of cards decreases
+    the relationship between the reduction of number of cards and
+    reduction of total rank should (could) be defined i.e.
+    If I play 2 cards both of rank 3 and two cards both of rank 6,
+    the reward should be higher for the second case
