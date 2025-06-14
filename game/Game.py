@@ -2,7 +2,7 @@
 
 import pydealer
 from pydealer import (Deck, Stack, Card)
-from hello import card_numerical_values
+from game.hello import card_numerical_values
 
 
 def deal_cards(player_list):
@@ -19,22 +19,6 @@ def deal_cards(player_list):
 class Game:
     def __init__(self):
         self.players = []
-        self.playing_deck = None
-        self.market = None
-        self.winner = None  # the game will keep running till there is a winner
-
-    """
-        see if the bottom card of the stack can be played on the top card
-        of the playing deck
-    """
-
-    def validate_move(self, played_stack):
-        pass
-
-    # add a player to the game
-    def add_player(self, player):
-        player.set_game(self)
-        self.players.append(player)
 
 
 class HNOCard(Card):
@@ -44,6 +28,11 @@ class HNOCard(Card):
     @property
     def numerical_value(self):
         return card_numerical_values[self.value]
+    
+    ### Override the __str__ method to return a string representation of the card
+    # TODO: Find out why the super class __str__ is being called instead of this one
+    def __str__(self):
+        return f"{self.value} of {self.suit} (value: {self.numerical_value})"
 
 
 class Player:
@@ -55,19 +44,6 @@ class Player:
     def set_game(self, game):
         self.game = game
 
-    def play(self):
-        pass
-
-    def card_total(self):
-        total = 0
-        for player_card in self.hand:
-            total = total + player_card.numerical_value
-        return total
-
-    def check_up(self, game):
-        if len(self.hand) == 0:
-            game.winner = self
-
     def __str__(self):
         print("Player ", id)
 
@@ -77,6 +53,6 @@ player_2 = Player(2, None)
 
 list_of_players = [player_1, player_2]
 
-deal_cards(list_of_players)
-for player in list_of_players:
-    print(player.card_total())
+deck = Deck()
+hno_card = HNOCard(deck.deal(1)[0])
+print(hno_card)  # This will call the __str__ method of HNOCard
