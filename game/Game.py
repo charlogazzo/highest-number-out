@@ -5,20 +5,26 @@ from pydealer import (Deck, Stack, Card)
 from game.hello import card_numerical_values
 
 
-def deal_cards(player_list):
-    total_deck = Deck()
-    total_deck.shuffle(3)
-
-    for player in player_list:
-        cards = total_deck.deal(5)
-        for player_card in cards:
-            player.hand.append(HNOCard(player_card))
-    # shuffle the cards and share 5 to each player in the game
-
-
 class Game:
     def __init__(self):
         self.players = []
+        self.game_deck = Deck(num_jokers=2, jokers=True)
+        self.playing_stack = Stack()
+        self.general_market = Stack()
+
+    def deal_cards(self, player_list):
+        total_deck = self.game_deck
+        total_deck.shuffle(3)
+
+        for player in player_list:
+            cards = total_deck.deal(5)
+            for player_card in cards:
+                player.hand.append(HNOCard(player_card))
+        self.players = player_list
+        
+        self.playing_stack.add(total_deck.deal(1)[0])
+
+        self.general_market = Stack(cards=list(total_deck.cards))
 
 
 class HNOCard(Card):
@@ -53,6 +59,6 @@ player_2 = Player(2, None)
 
 list_of_players = [player_1, player_2]
 
-deck = Deck()
-hno_card = HNOCard(deck.deal(1)[0])
-print(hno_card)  # This will call the __str__ method of HNOCard
+deck = Deck(num_jokers=2, jokers=True)
+
+print(len(deck.cards))  # Should print the number of cards in the deck
