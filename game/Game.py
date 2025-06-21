@@ -2,56 +2,38 @@
 
 import pydealer
 from pydealer import (Deck, Stack, Card)
-from game.hello import card_numerical_values
+from game.utils.models import HNOCard, Player, HNODeck, HNOStack
 
 
 class Game:
     def __init__(self):
         self.players = []
-        self.game_deck = Deck(num_jokers=2, jokers=True)
-        self.playing_stack = Stack()
-        self.general_market = Stack()
+        self.game_deck = HNODeck()
+        self.playing_stack = HNOStack(cards=None)
+        self.general_market = HNOStack(cards=None)
 
-    def deal_cards(self, player_list):
+    def deal_cards_to_players(self, player_list, num_cards):
         total_deck = self.game_deck
         total_deck.shuffle(3)
 
+        # Deal 5 cards to each player
         for player in player_list:
-            cards = total_deck.deal(5)
+            cards = total_deck.deal(num=num_cards)
+            print(cards.cards)
             for player_card in cards:
-                player.hand.append(HNOCard(player_card))
+                player.hand.append(player_card)
+
+        # Assign the list of players to the game
         self.players = player_list
+        for player in self.players:
+            player.set_game(self)
         
-        self.playing_stack.add(total_deck.deal(1)[0])
+        # Deal 1 card to the playing stack
+        if len(total_deck.cards) > 0:
+            self.playing_stack = total_deck.deal(1)
 
+        # the rest of the deck goes to the general market
         self.general_market = Stack(cards=list(total_deck.cards))
-
-
-class HNOCard(Card):
-    def __init__(self, card):
-        super().__init__(card.value, card.suit)
-
-    @property
-    def numerical_value(self):
-        return card_numerical_values[self.value]
-    
-    ### Override the __str__ method to return a string representation of the card
-    # TODO: Find out why the super class __str__ is being called instead of this one
-    def __str__(self):
-        return f"{self.value} of {self.suit} (value: {self.numerical_value})"
-
-
-class Player:
-    def __init__(self, player_id, hand):
-        self.player_id = player_id
-        self.hand = []
-        self.game = None
-
-    def set_game(self, game):
-        self.game = game
-
-    def __str__(self):
-        print("Player ", id)
 
 
 player_1 = Player(1, None)
@@ -59,6 +41,6 @@ player_2 = Player(2, None)
 
 list_of_players = [player_1, player_2]
 
-deck = Deck(num_jokers=2, jokers=True)
+game = Game()
+game.deal_cards_to_players(list_of_players, 5)
 
-print(len(deck.cards))  # Should print the number of cards in the deck
