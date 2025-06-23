@@ -1,8 +1,6 @@
 import sys
 import os
 
-from pydealer import Card
-
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 

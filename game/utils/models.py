@@ -33,8 +33,7 @@ class HNOStack:
     def bottom_card(self):
         return self.cards[0]
 
-    def add(self, cards):
-        self.cards.extend(cards)
+    def add(self, cards):        self.cards.extend(cards)
 
     def add_stack(self, hno_stack):
         self.add(hno_stack.cards)
