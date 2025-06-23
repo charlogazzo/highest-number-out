@@ -17,7 +17,3 @@ card_numerical_values = {
     "King": 13,
     "Joker": 20
 }
-
-deck = pydealer.Deck()
-red_joker = Card("Ace", "Spades")
-black_joker = Card("Ace", "Spades")
